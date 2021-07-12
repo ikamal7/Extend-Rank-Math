@@ -16,7 +16,7 @@
  * Plugin Name:       Extend Rank Math
  * Plugin URI:        https://kamal.pw/rank-math-extend
  * Description:       Extend Rank Math is a helper plugin for Rank Math.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Kamal H.
  * Author URI:        https://kamal.pw/
  * License:           GPL-2.0+
@@ -43,7 +43,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'Extend_Rankmath_VERSION', '1.0.0' );
+define( 'Extend_Rankmath_VERSION', '1.0.1' );
 
 /**
  * The code that runs during plugin activation.
