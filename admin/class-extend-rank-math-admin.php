@@ -51,6 +51,7 @@
          * @param string $version     The version of this plugin.
          */
         public function __construct( $plugin_name, $version ) {
+            $this->settings_api = new WeDevs_Settings_API;
             $this->options     = get_option( 'Extend_Rankmath_settings' );
             $this->plugin_name = $plugin_name;
             $this->version     = $version;
@@ -58,6 +59,9 @@
             add_action( 'admin_init', [$this, 'Extend_Rankmath_settings_init'] );
             add_filter( 'rank_math/focus_keyword/maxtags', [$this, 'focus_keyword']);
             add_filter( 'plugin_action_links_'. ERM_BASE, [ $this, 'settings' ] );
+
+            // Admin bar Mode filter
+            add_filter( 'rank_math/admin_bar/items', [$this, 'admin_bar_mode']);
         }
 
 
@@ -120,6 +124,14 @@
         public function focus_keyword() {
             return $this->options['rankmath_focus_keyword']; // Number of Focus Keywords. 
         }
+        /**
+         * Add item to Rank Math admin bar node.
+         *
+         * @param array $items Array of nodes for Rank Math menu.
+         */
+        public function admin_bar_mode( $items ) {
+            return $items;
+        }
 
         public function Extend_Rankmath_add_admin_menu() {
             add_options_page( 'Extend Rank Math', 'Extend Rank Math', 'manage_options', 'extend_rank_math', [$this, 'Extend_Rankmath_options_page'] );
@@ -127,55 +139,89 @@
         }
 
         public function Extend_Rankmath_settings_init() {
-            register_setting( 'Extend_Rankmath_settings', 'Extend_Rankmath_settings' );
+            //set the settings
+            $this->settings_api->set_sections( $this->get_settings_sections() );
+            $this->settings_api->set_fields( $this->get_settings_fields() );
 
-            add_settings_section(
-                'Extend_Rankmath_settings_section',
-                '',
-                '',
-                'Extend_Rankmath_settings'
-            );
-
-            add_settings_field(
-                'rankmath_focus_keyword',
-                __( 'Focus Keyword Limit', 'extend-rank-math' ),
-                [$this, 'rankmath_focus_keyword_render'],
-                'Extend_Rankmath_settings',
-                'Extend_Rankmath_settings_section'
-            );
+            //initialize settings
+            $this->settings_api->admin_init();
 
         }
 
-        public function rankmath_focus_keyword_render() {
-            $limit = isset( $this->options['rankmath_focus_keyword'] ) ? $this->options['rankmath_focus_keyword'] : 5;
-
-        ?>
-			<input type='number' name='Extend_Rankmath_settings[rankmath_focus_keyword]' value='<?php echo $limit; ?>'>
-		<?php
-
-            }
-
-            public function Extend_Rankmath_settings_section_callback() {
-                // echo __( 'This section description', 'extend-rank-math' );
-
-            }
-
-            public function Extend_Rankmath_options_page() {
-            ?>
-			<form action='options.php' method='post'>
-
-				<h2><?php _e('Extend Rank Math'); ?></h2>
-
-				<?php
-					settings_fields( 'Extend_Rankmath_settings' );
-					do_settings_sections( 'Extend_Rankmath_settings' );
-					submit_button();
-				?>
-
-			</form>
-		<?php
-
-                }
-                
+        function get_settings_sections() {
+            $sections = array(
+                array(
+                    'id'    => 'erm_basics',
+                    'title' => __( 'Basic Settings', ' extend-rank-math' )
+                ),
+            );
+            return $sections;
         }
+        /**
+     * Returns all the settings fields
+     *
+     * @return array settings fields
+     */
+    function get_settings_fields() {
+        $settings_fields = array(
+            'erm_basics' => array(
+                array(
+                    'name'              => 'rankmath_focus_keyword',
+                    'label'             => __( 'Focus Keyword Limit', ' extend-rank-math' ),
+                    'desc'              => __( '', ' extend-rank-math' ),
+                    'placeholder'       => __( '', ' extend-rank-math' ),
+                    'min'               => 0,
+                    'max'               => 100,
+                    'step'              => '1',
+                    'type'              => 'number',
+                    'default'           => '10',
+                    'sanitize_callback' => 'floatval'
+                ),
+                array(
+                    'name'        => 'custom_power_words',
+                    'label'       => __( 'Custom Power Words', ' extend-rank-math' ),
+                    'desc'        => __( 'Word separated by `comma`', ' extend-rank-math' ),
+                    'placeholder' => __( 'word-1, word-2', ' extend-rank-math' ),
+                    'type'        => 'textarea'
+                ),
+                array(
+                    'name'  => 'show_keyword_meta',
+                    'label' => __( 'Show Keyword meta tag frontend', ' extend-rank-math' ),
+                    'desc'  => __( 'Add <\meta name=\'keywords\' content=\'focus keywords\'>', ' extend-rank-math' ),
+                    'type'  => 'checkbox'
+                ),
+            ),
+        );
+
+        return $settings_fields;
+    }
+
+    public function Extend_Rankmath_options_page() {
+        echo '<div class="wrap">';
+
+        $this->settings_api->show_navigation();
+        $this->settings_api->show_forms();
+
+        echo '</div>';
+    }
+
+
+    /**
+     * Get all the pages
+     *
+     * @return array page names with key value pairs
+     */
+    function get_pages() {
+        $pages = get_pages();
+        $pages_options = array();
+        if ( $pages ) {
+            foreach ($pages as $page) {
+                $pages_options[$page->ID] = $page->post_title;
+            }
+        }
+
+        return $pages_options;
+    }
+
+}
 

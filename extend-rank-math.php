@@ -71,6 +71,28 @@ register_deactivation_hook( __FILE__, 'deactivate_Extend_Rankmath' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-extend-rank-math.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class.settings-api.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-extend-rank-math-filter.php';
+
+/**
+ * Get the value of a settings field
+ *
+ * @param string $option settings field name
+ * @param string $section the section name this field belongs to
+ * @param string $default default text if it's not found
+ *
+ * @return mixed
+ */
+function rm_get_option( $option, $section, $default = '' ) {
+
+    $options = get_option( $section );
+
+    if ( isset( $options[$option] ) ) {
+        return $options[$option];
+    }
+
+    return $default;
+}
 
 /**
  * Begins execution of the plugin.
