@@ -1,15 +1,10 @@
-=== Extend Rank Math === Contributors: ikamal Donate link:
-https://kamal.pw/ Tags: rank math, focus keyword, google search
-console,seo,sitemap, Requires at least: 4.0.1 Tested up to: 5.7.2 Stable
-tag: 1.0.1 License: GPLv2 or later License URI:
-http://www.gnu.org/licenses/gpl-2.0.html
+=== Extend Rank Math === Contributors: ikamal Donate link: https://kamal.pw/ Tags: rank math, focus keyword, google search console,seo,sitemap, Requires at least: 4.0.1 Tested up to: 5.7.2 Stable tag: 1.0.1 License: GPLv2 or later License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Extend Rank Math is a helper plugin for Rank Math.
 
 == Description ==
 
-Extend Rank Math is a helper plugin for Rank Math. This plugin help
-extends the Rank Math functionality.
+Extend Rank Math is a helper plugin for Rank Math. This plugin help extends the Rank Math functionality.
 
 For settings You need to go **Settings -\> Extend Rank Math**
 
@@ -28,8 +23,7 @@ For settings You need to go **Settings -\> Extend Rank Math**
 
 1.  Download the plugin
 2.  Extract the contents of the zip file
-3.  Upload the contents of the zip file to the `wp-content/plugins/`
-    folder of your WordPress installation
+3.  Upload the contents of the zip file to the `wp-content/plugins/` folder of your WordPress installation
 4.  Activate the Extend Rank Math plugin from 'Plugins' page.
 
 == Frequently Asked Questions ==
